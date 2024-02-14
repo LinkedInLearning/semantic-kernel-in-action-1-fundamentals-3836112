@@ -33,11 +33,11 @@ public class TryingOutTheKernel
                 });
 
         Console.WriteLine(poemResultSK);
-
+        
 #pragma warning disable SKEXP0050        
         kernel.ImportPluginFromType<TimePlugin>();
         var today = await kernel.InvokeAsync("TimePlugin", "Today");
-        Console.WriteLine(today);
+        Console.WriteLine($"Today's date is: {today}");
         Console.ReadLine();
     }
 }
