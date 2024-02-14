@@ -10,8 +10,8 @@ public class TryingOutTheKernel
         var builder = Kernel.CreateBuilder();
 
         var modelDeploymentName = "Gpt4v32k";
-        var azureOpenAIEndpoint = Environment.GetEnvironmentVariable("AzureOpenAI_Endpoint", EnvironmentVariableTarget.User);
-        var azureOpenAIApiKey = Environment.GetEnvironmentVariable("AzureOpenAI_ApiKey", EnvironmentVariableTarget.User);
+        var azureOpenAIEndpoint = Environment.GetEnvironmentVariable("AZUREOPENAI_ENDPOINT");
+        var azureOpenAIApiKey = Environment.GetEnvironmentVariable("AZUREOPENAI_APIKEY");
 
         builder.Services.AddAzureOpenAIChatCompletion(
             modelDeploymentName,
@@ -20,7 +20,9 @@ public class TryingOutTheKernel
             modelId: "gpt-4-32k"
         );
 
-        builder.Plugins.AddFromPromptDirectory("./plugins/WriterPlugin");
+        var path = "./plugins/WriterPlugin";
+        var normalizedPath = NormalizePath(path);
+        builder.Plugins.AddFromPromptDirectory(normalizedPath);
         var kernel = builder.Build();
 
         var SKText = "The Semantic Kernel SDK has been born and is out to the world on December 19th, now all .NET developers are AI developers...";
@@ -39,5 +41,12 @@ public class TryingOutTheKernel
         var today = await kernel.InvokeAsync("TimePlugin", "Today");
         Console.WriteLine($"Today's date is: {today}");
         Console.ReadLine();
+    }
+
+    static string NormalizePath(string path)
+    {
+        // Use Path.DirectorySeparatorChar to handle different OS path separators
+        return path.Replace("/", Path.DirectorySeparatorChar.ToString())
+                   .Replace("\\", Path.DirectorySeparatorChar.ToString());
     }
 }
