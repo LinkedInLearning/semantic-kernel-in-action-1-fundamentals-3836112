@@ -20,7 +20,7 @@ public class TryingOutTheKernel
             modelId: "gpt-4-32k"
         );
 
-        var path = "./plugins/WriterPlugin";
+        var path = "./Plugins/WriterPlugin";
         var normalizedPath = NormalizePath(path);
         builder.Plugins.AddFromPromptDirectory(normalizedPath);
         var kernel = builder.Build();
