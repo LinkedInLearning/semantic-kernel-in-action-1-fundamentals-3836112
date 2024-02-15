@@ -8,7 +8,7 @@
     "ghcr.io/devcontainers/features/dotnet:2": {}
   },
   "onCreateCommand": "echo PS1='\"$ \"' >> ~/.bashrc",
-  "postAttachCommand": "git pull --all"
+  "postAttachCommand": "git pull --all",
   // Update welcome text and set terminal prompt to '$ '
   // DevContainer Reference: https://code.visualstudio.com/docs/remote/devcontainerjson-reference
   // Features to add to the dev container. More info: https://containers.dev/features.
@@ -21,8 +21,19 @@
   //		}
   // }
   // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "dotnet restore",
+  "postCreateCommand": "dotnet restore",
   // Configure tool-specific properties.
+  "customizations": {
+    // Configure properties specific to VS Code.
+    "vscode": {
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "ms-dotnettools.csdevkit",
+        "ms-semantic-kernel.semantic-kernel"
+      ]
+    }
+  }
   // "customizations": {},
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
