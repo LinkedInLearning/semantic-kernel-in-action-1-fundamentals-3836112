@@ -1,6 +1,6 @@
 ﻿using Microsoft.SemanticKernel;
 
-namespace _02_04;
+namespace _02_05;
 
 public class TryingOutTheKernel
 {
