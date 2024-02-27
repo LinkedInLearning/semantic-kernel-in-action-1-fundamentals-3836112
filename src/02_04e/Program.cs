@@ -5,3 +5,4 @@ Console.WriteLine("Hello, Semantic Kernel World!");
 
 await TryingOutTheKernel.Execute();
 
+
