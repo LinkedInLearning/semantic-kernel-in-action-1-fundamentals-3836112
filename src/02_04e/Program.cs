@@ -4,3 +4,4 @@ using _02_04;
 Console.WriteLine("Hello, Semantic Kernel World!");
 
 await TryingOutTheKernel.Execute();
+
