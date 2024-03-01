@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "description": "Respond to a question or statement as Thor, god of thunder - Avenger",
+  "execution_settings": {
+    "default": {
+      "max_tokens": 1512,
+      "temperature": 0.5,
+      "top_p": 0.0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    }
+  },
+  "input_variables": [
+    {
+      "name": "input",
+      "description": "Text to respond to",
+      "default": "",
+      "is_required": true
+    }
+  ]
+}

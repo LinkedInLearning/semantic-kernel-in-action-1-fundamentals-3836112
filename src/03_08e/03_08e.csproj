@@ -13,4 +13,10 @@
     <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="plugins\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

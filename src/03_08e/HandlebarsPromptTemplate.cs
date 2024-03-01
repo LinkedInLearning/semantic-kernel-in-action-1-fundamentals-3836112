@@ -1,6 +1,5 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.PromptTemplates.Handlebars;
-
 namespace _03_08e;
 
 public class HandlebarsPromptTemplate
@@ -34,7 +33,6 @@ public class HandlebarsPromptTemplate
                     {{/each}}
 
                     Explain what you will be doing next at {{whatTimeIsIt}} in a fun way.";
-
 
     // Create handlebars template for intent
     var handlebarsFunction = kernel.CreateFunctionFromPrompt(
