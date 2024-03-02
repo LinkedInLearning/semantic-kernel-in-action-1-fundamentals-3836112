@@ -21,14 +21,14 @@ public class StepwisePlannerPractice
     );
     var kernel = builder.Build();
 
-    var kernelFunctionRespondAsTony = kernel.CreateFunctionFromPrompt(
+    var kernelFunctionRespondAsScientific = kernel.CreateFunctionFromPrompt(
         new PromptTemplateConfig()
         {
-          Name = "RespondAsTony",
-          Description = "Respond as if you were Tony Stark.",
+          Name = "RespondAsScientific",
+          Description = "Respond as if you were a Scientific.",
           Template = @"After the user request/question, 
                     {{$input}},
-                    Respond to the user question as if you were Tony Stark, Iron man. 
+                    Respond to the user question as if you were a Scientific. 
                     Respond to it as you were him, showing your personality",
           TemplateFormat = "semantic-kernel",
           InputVariables = [
@@ -36,15 +36,14 @@ public class StepwisePlannerPractice
             ]
         });
 
-    var kernelFunctionRespondAsThor = kernel.CreateFunctionFromPrompt(
+    var kernelFunctionRespondAsPoliceman = kernel.CreateFunctionFromPrompt(
         new PromptTemplateConfig()
         {
-          Name = "RespondAsThor",
-          Description = "Respond as if you were Thor, god of thunder.",
+          Name = "RespondAsPoliceman",
+          Description = "Respond as if you were a Policeman.",
           Template = @"After the user request/question, 
                     {{$input}},
-                    Respond to the user question as if you were Thor, the god of thunder, 
-                    from the Avengers. Respond to it as you were him, showing your personality, 
+                    Respond to the user question as if you were a Policeman, showing your personality, 
                     humor and level of intelligence.",
           TemplateFormat = "semantic-kernel",
           InputVariables = [
@@ -52,33 +51,32 @@ public class StepwisePlannerPractice
             ]
         });
 
-    KernelPlugin superheroOpinionsPlugin =
+    KernelPlugin roleOpinionsPlugin =
         KernelPluginFactory.CreateFromFunctions(
-            "SuperHeroTalk",
-            "Responds to questions or statements as superheros do.",
+            "roleTalk",
+            "Responds to questions or statements asuming different roles.",
             new[] {
-                    kernelFunctionRespondAsTony,
-                    kernelFunctionRespondAsThor
+                    kernelFunctionRespondAsScientific,
+                    kernelFunctionRespondAsPoliceman
                   });
-    kernel.Plugins.Add(superheroOpinionsPlugin);
+    kernel.Plugins.Add(roleOpinionsPlugin);
 
-    string planPrompt = "This is the user question to my superhero friends:" +
+    string planPrompt = "This is the user question to my expert friends:" +
         "---" +
         "User Question: " +
         "I am being attacked by a thug which wants to rob me, what do the superheroes recommend me to do in my position? I am weak, no combat skills and not a good runner... " +
         "---" +
-        "Please take this question as input for getting the superheroes opinions, Tony, Thor suggestions. Do not modify the input." +
-        "Use the plugin SuperHeroTalk to get the suggestions and opinions of the superheroes." +
-        "In addition state each superheros opinion on each other stated opinions." +
-        "Put the Hero responses preceded with SUPERHERO SUGGESTIONS: and inside that preceed with Tony: and Thor: for clarity." +
+        "Please take this question as input for getting the expert opinions, Mr. Policeman, Scientist suggestions. Do not modify the input." +
+        "Use the plugin roleTalk to get the suggestions and opinions of the experts." +
+        "In addition state each expert opinion on each other stated opinions." +
+        "Put the expert responses preceded with EXPERT SUGGESTIONS: and inside that preceed with Policeman: and Scientist: for clarity." +
         "Perform this with the following steps: " +
-        "1. Get the suggestions from each the superheroes." +
-        "2. Get the opinions of each superhero on the other superheroes suggestions." +
+        "1. Get the suggestions from each the experts." +
+        "2. Get the opinions of each expert on the other expert suggestions." +
         "3. Return the results in the format: " +
-        "SUPERHERO SUGGESTIONS: Tony: <suggestion> Thor: <suggestion> " +
-        "SUPERHERO OPINIONS: Tony: <opinion on Thor> Thor: <opinion on Tony> " +
-        "IMPORTANT: on the plan ensure that the user question is asigned to a variable and used as input. " +
-        "Do not modify the user question input.";
+        "Expert SUGGESTIONS: Policeman: <suggestion> Scientist: <suggestion> " +
+        "OPINIONS: Policeman: <opinion on Scientist> Scientist: <opinion on Policeman> " +
+        "IMPORTANT: on the plan ensure that the user question is asigned to a variable and used as input. Do not modify the user question input.";
 
     var planner = new FunctionCallingStepwisePlanner();
     FunctionCallingStepwisePlannerResult result =

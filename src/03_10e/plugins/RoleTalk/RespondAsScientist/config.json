@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "description": "Respond to a question or statement as Thor, god of thunder - Avenger",
+  "description": "Respond to a question or statement as a scientist.",
   "execution_settings": {
     "default": {
       "max_tokens": 1512,
-      "temperature": 0.5,
+      "temperature": 0.6,
       "top_p": 0.0,
       "presence_penalty": 0.0,
       "frequency_penalty": 0.0

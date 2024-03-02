@@ -22,7 +22,7 @@ public class HandlebarsChainingFunctions
     var pluginDirectory = Path.Combine(
         System.IO.Directory.GetCurrentDirectory(),
         "plugins",
-        "SuperHeroTalk");
+        "RoleTalk");
     kernel.ImportPluginFromPromptDirectory(pluginDirectory);
 
     string question = "What's the best way to deal with a city-wide power outage?";
@@ -35,19 +35,18 @@ public class HandlebarsChainingFunctions
                 {{$input}},
                 ---
 
-                Given the question/statement provide the opinion of the superhereoes as is without changing anything. 
-                Output the heroes responses as they have spoken, output Tony, Thor before anything. 
+                Given the question/statement provide the opinion of a Policeman and Scientific as is without changing anything. 
+                Output the responses as they have spoken before anything. 
                 Do not modify the responses in any way, output them as is.
                 Respect uppercase and do not modify the response.
                 Also provide the opinion of Thor regarding Tony's opinion.
 
-                {{set ""responseAsTony"" (SuperHeroTalk-RespondAsTony input) }}
-                {{set ""responseAsThor"" (SuperHeroTalk-RespondAsThor input) }}
-                {{set ""responseAsHulk"" (SuperHeroTalk-RespondAsHulk input) }}
-                {{set ""opinionFromThorToTony"" (SuperHeroTalk-RespondAsThor responseAsTony) }}
+                {{set ""responseAsPoliceman"" (RoleTalk-RespondAsPoliceman input) }}
+                {{set ""responseAsScientific"" (RoleTalk-RespondAsScientific input) }}
+                {{set ""opinionFromScientificToPoliceman"" (RoleTalk-RespondAsScientific responseAsPoliceman) }}
 
                 {{!-- Example of concatenating text and variables to finally output it with json --}}
-                {{set ""finalOutput"" (concat ""Tony: "" responseAsTony "" Thor: "" responseAsThor "" Hulk: "" responseAsHulk  "" Thor to Tony: "" opinionFromThorToTony)}}
+                {{set ""finalOutput"" (concat ""Policeman: "" responseAsPoliceman "" Scientific: "" responseAsScientific  "" Scientific to Policeman: "" opinionFromScientificToPoliceman)}}
                 {{json finalOutput}}
                 ",
           TemplateFormat = "handlebars"

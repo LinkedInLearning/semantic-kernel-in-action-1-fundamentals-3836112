@@ -1,10 +1,10 @@
 {
   "schema": 1,
-  "description": "Respond to a question or statement as Tony Stark, Iron Man - Avenger",
+  "description": "Respond to a question or statement as a Police Officer",
   "execution_settings": {
     "default": {
       "max_tokens": 1512,
-      "temperature": 0.6,
+      "temperature": 0.5,
       "top_p": 0.0,
       "presence_penalty": 0.0,
       "frequency_penalty": 0.0

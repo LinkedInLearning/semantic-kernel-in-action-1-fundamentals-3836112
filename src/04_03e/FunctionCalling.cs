@@ -23,31 +23,31 @@ public class FunctionCalling
     );
     var kernel = builder.Build();
 
-    KernelFunction kernelFunctionRespondAsTony =
+    KernelFunction kernelFunctionRespondAsScientific =
         KernelFunctionFactory.CreateFromPrompt(
-            "Respond to the user question as if you were Tony Stark, Iron man. Respond to it as you were him, showing your personality",
-            functionName: "RespondAsTony",
-            description: "Responds to a question as the superhero Tony Stark, Iron Man.");
+            "Respond to the user question as if you were a Scientific. Respond to it as you were him, showing your personality",
+            functionName: "RespondAsScientific",
+            description: "Responds to a question as a Scientific.");
 
-    KernelFunction kernelFunctionRespondAsThor =
+    KernelFunction kernelFunctionRespondAsPoliceman =
         KernelFunctionFactory.CreateFromPrompt(
-            "Respond to the user question as if you were Thor, the god of thunder, from the Avengers. Respond to it as you were him, showing your personality, humor and level of intelligence.",
-            functionName: "RespondAsThor",
-            description: "Responds to a question as the superhero Thor, the god of thunder.");
+            "Respond to the user question as if you were a Policeman. Respond to it as you were him, showing your personality, humor and level of intelligence.",
+            functionName: "RespondAsPoliceman",
+            description: "Responds to a question as a Policeman.");
 
-    KernelPlugin superheroOpinionsPlugin =
+    KernelPlugin roleOpinionsPlugin =
         KernelPluginFactory.CreateFromFunctions(
-            "SuperHeroTalk",
-            "Responds to questions or statements as superheros do.",
+            "RoleTalk",
+            "Responds to questions or statements asuming different roles.",
             new[] {
-                    kernelFunctionRespondAsTony,
-                    kernelFunctionRespondAsThor
+                    kernelFunctionRespondAsScientific,
+                    kernelFunctionRespondAsPoliceman
                   });
-    kernel.Plugins.Add(superheroOpinionsPlugin);
+    kernel.Plugins.Add(roleOpinionsPlugin);
     kernel.Plugins.AddFromType<WhatDateIsIt>();
 
     string userPrompt = "I just woke up and found myself in the middle of nowhere, " +
-        "do you know what date is it? and what would Tony Stark do in my place?";
+        "do you know what date is it? and what would a policeman and a scientist do in my place?";
 
     OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
     {
