@@ -1,6 +1,5 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Experimental.Agents;
-using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace _05_03e;
 
