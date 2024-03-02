@@ -47,7 +47,10 @@ public class FunctionCalling
     kernel.Plugins.AddFromType<WhatDateIsIt>();
 
     string userPrompt = "I just woke up and found myself in the middle of nowhere, " +
-        "do you know what date is it? and what would a policeman and a scientist do in my place?";
+        "do you know what date is it? and what would a policeman and a scientist do in my place?" +
+        "Please provide me the date using the WhatDateIsIt plugin and the Date function, and then " +
+        "the responses from the policeman and the scientist, on this order. " +
+        "For this two responses, use the RoleTalk plugin and the RespondAsPoliceman and RespondAsScientific functions.";
 
     OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
     {

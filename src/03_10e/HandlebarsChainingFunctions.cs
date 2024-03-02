@@ -30,23 +30,14 @@ public class HandlebarsChainingFunctions
         new()
         {
           Template = @"
-                After the user request/question, 
-                ---
-                {{$input}},
-                ---
-
-                Given the question/statement provide the opinion of a Policeman and Scientific as is without changing anything. 
-                Output the responses as they have spoken before anything. 
-                Do not modify the responses in any way, output them as is.
-                Respect uppercase and do not modify the response.
-                Also provide the opinion of Thor regarding Tony's opinion.
-
                 {{set ""responseAsPoliceman"" (RoleTalk-RespondAsPoliceman input) }}
-                {{set ""responseAsScientific"" (RoleTalk-RespondAsScientific input) }}
-                {{set ""opinionFromScientificToPoliceman"" (RoleTalk-RespondAsScientific responseAsPoliceman) }}
+                {{set ""responseAsScientific"" (RoleTalk-RespondAsScientist input) }}
+                {{set ""opinionFromScientificToPoliceman"" (RoleTalk-RespondAsScientist responseAsPoliceman) }}
 
                 {{!-- Example of concatenating text and variables to finally output it with json --}}
                 {{set ""finalOutput"" (concat ""Policeman: "" responseAsPoliceman "" Scientific: "" responseAsScientific  "" Scientific to Policeman: "" opinionFromScientificToPoliceman)}}
+                
+                Output the following responses as is, do not modify anything:
                 {{json finalOutput}}
                 ",
           TemplateFormat = "handlebars"
