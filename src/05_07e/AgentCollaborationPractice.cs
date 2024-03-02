@@ -21,24 +21,24 @@ public class AgentCollaborationPractice
     var kernel = builder.Build();
 
     // Create agents
-    // artDirector agent => Reviews ideas, provides feedback and gives the FINAL APPROVAL
-    var artDirectorAgent =
+    // Marketing Editor agent => Reviews slogan, provides feedback and gives the FINAL APPROVAL
+    var editorAgent =
         Track(
             await new AgentBuilder()
                 .WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)
-                .WithInstructions("You are an art director who has opinions about copywriting born of a love for David Ogilvy. The goal is to determine is the given copy is acceptable to print, even if it isn't perfect.  If not, provide insight on how to refine suggested copy without example.  Always respond to the most recent message by evaluating and providing critique without example.  Always repeat the copy at the beginning.  If copy is acceptable and meets your criteria, say: PRINT IT.")
-                .WithName("Art Director")
-                .WithDescription("Art Director")
+                .WithInstructions("You are a professional editor with a profound expertise in crafting and refining content for marketing. You aredeeply passionate about the intersection of technology and storytelling and love when words ryhme together. Your goal is to determine if a marketing slogan is acceptable, even if it isn't perfect.  If not, provide constructive insights on how to improve the slogan without providing an example.  Respond to the most recent message by evaluating and providing feedback without giving any example.  Always repeat the slogan at the beginning.  If the slogan is is acceptable and meets your criteria, say: I APPROVE.")
+                .WithName("Marketing Editor")
+                .WithDescription("Marketing Editor")
                 .BuildAsync());
 
-    // copyWriterAgent => generates ideas
-    var copyWriterAgent =
+    // Marketing Writer Agent => generates ideas
+    var writerAgent =
         Track(
             await new AgentBuilder()
                 .WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)
-                .WithInstructions("You are a copywriter with ten years of experience and are known for brevity and a dry humor. You're laser focused on the goal at hand. Don't waste time with chit chat. The goal is to refine and decide on the single best copy as an expert in the field.  Consider suggestions when refining an idea.")
-                .WithName("Copywriter")
-                .WithDescription("Copywriter")
+                .WithInstructions("You are a marketing writer with some years of experience, you like efficiency of words and sarcasm. You like to deliver greatness and do your outmost always. Your goal is given an idea description to provide a Marketing slogan. If feedback is provided, take it into consideration to improve the Slogan.")
+                .WithName("Marketing Writer")
+                .WithDescription("Marketing Writer")
                 .BuildAsync());
 
     // Create coordinator agent to oversee collaboration
@@ -46,9 +46,9 @@ public class AgentCollaborationPractice
         Track(
             await new AgentBuilder()
                 .WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)
-                .WithInstructions("Reply the provided concept and have the copy-writer generate an marketing idea (copy).  Then have the art-director reply to the copy-writer with a review of the copy.  Always include the source copy in any message.  Always include the art-director comments when interacting with the copy-writer.  Coordinate the repeated replies between the copy-writer and art-director until the art-director approves the copy.")
-                .WithPlugin(copyWriterAgent.AsPlugin())
-                .WithPlugin(artDirectorAgent.AsPlugin())
+                .WithInstructions("Reply the provided Slogan and have the Marketing writer generate a Slogan. Then have the Marketing Editor review and reply to the marketing writer with feedback on the Slogan. Always include the source Slogan in all the messages.  Always include the Marketing Editor feedback when interacting with the Marketing Writer. Coordinate the flow of replies between the marketing writer and the marketing editor until the Marketing Editor approves the Slogan.")
+                .WithPlugin(writerAgent.AsPlugin())
+                .WithPlugin(editorAgent.AsPlugin())
                 .BuildAsync());
 
     // note that threads aren't attached to specific agents
@@ -73,23 +73,19 @@ public class AgentCollaborationPractice
       }
       else
       {
-        // Add the user message
         var messageUser = await _agentsThread.AddUserMessageAsync(ideaToEllaborate);
         DisplayMessage(messageUser);
 
         bool isComplete = false;
         do
         {
-          // Initiate copy-writer input
-          var agentMessages = await _agentsThread.InvokeAsync(copyWriterAgent).ToArrayAsync();
-          DisplayMessages(agentMessages, copyWriterAgent);
+          var agentMessages = await _agentsThread.InvokeAsync(writerAgent).ToArrayAsync();
+          DisplayMessages(agentMessages, writerAgent);
 
-          // Initiate art-director input
-          agentMessages = await _agentsThread.InvokeAsync(artDirectorAgent).ToArrayAsync();
-          DisplayMessages(agentMessages, artDirectorAgent);
+          agentMessages = await _agentsThread.InvokeAsync(editorAgent).ToArrayAsync();
+          DisplayMessages(agentMessages, editorAgent);
 
-          // Evaluate if goal is met.
-          if (agentMessages.First().Content.Contains("PRINT IT", StringComparison.OrdinalIgnoreCase))
+          if (agentMessages.First().Content.Contains("I APPROVE", StringComparison.OrdinalIgnoreCase))
           {
             isComplete = true;
           }
@@ -134,21 +130,18 @@ public class AgentCollaborationPractice
   }
   private async Task CleanUpAsync()
   {
-    Console.WriteLine("🧽 Cleaning up ...");
-
     if (_agentsThread != null)
     {
-      Console.WriteLine("Thread going away ...");
       _agentsThread.DeleteAsync();
       _agentsThread = null;
     }
 
     if (_agents.Any())
     {
-      Console.WriteLine("Agents going away ...");
       await Task.WhenAll(_agents.Select(agent => agent.DeleteAsync()));
       _agents.Clear();
     }
+    Console.WriteLine("Cleaned up agents and threads.");
   }
 
 

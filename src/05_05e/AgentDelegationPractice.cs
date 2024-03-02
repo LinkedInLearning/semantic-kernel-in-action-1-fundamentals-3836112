@@ -32,7 +32,7 @@ public class AgentDelegationPractice
             await new AgentBuilder()
                 .WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)
                 .FromTemplatePath(pathToToolAgent)
-                .WithDescription("Answer questions about how the menu uses the tool.")
+                .WithDescription("Answer questions about the menu by using the menuPlugin tool.")
                 .WithPlugin(menuPlugin)
                 .BuildAsync());
 
@@ -54,18 +54,17 @@ public class AgentDelegationPractice
 
     var messages = new string[]
     {
-      "What's on the menu? ",
+      "What is on today's menu? ",
+      "how much does the Eye Steak with veggies cost? ",
       "Can you talk like pirate?",
       "Thank you",
     };
 
     // note that threads aren't attached to specific agents
     _agentsThread = await toolAgent.NewThreadAsync();
-    Console.WriteLine("The message thread 🧵 is ready!");
 
     try
     {
-      // We delegate the messages to the toolAgent who delegates to its subordinate plugin agents
       foreach (var message in messages)
       {
         var responseMessages =
@@ -111,18 +110,14 @@ public class AgentDelegationPractice
   }
   private async Task CleanUpAsync()
   {
-    Console.WriteLine("🧽 Cleaning up ...");
-
     if (_agentsThread != null)
     {
-      Console.WriteLine("Thread going away ...");
       _agentsThread.DeleteAsync();
       _agentsThread = null;
     }
 
     if (_agents.Any())
     {
-      Console.WriteLine("Agents going away ...");
       await Task.WhenAll(_agents.Select(agent => agent.DeleteAsync()));
       _agents.Clear();
     }

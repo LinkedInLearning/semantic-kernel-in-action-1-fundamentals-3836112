@@ -4,14 +4,14 @@ using Microsoft.SemanticKernel;
 namespace _05_05e;
 public sealed class MenuPlugin
 {
-  [KernelFunction, Description("Provides a list of specials from the menu.")]
+  [KernelFunction, Description("Provides today's the menu.")]
   [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1024:Use properties where appropriate", Justification = "Too smart")]
-  public string GetSpecials()
+  public string GetMenu()
   {
     return @"
-            Special Soup: Clam Chowder
-            Special Salad: Cobb Salad
-            Special Drink: Chai Tea
+            Starters: Tom ka gay soup
+            Main dish: Eye Steak with veggies
+            Dessert: Mango with Rice
             ";
   }
 
@@ -20,6 +20,6 @@ public sealed class MenuPlugin
       [Description("The name of the menu item.")]
             string menuItem)
   {
-    return "$9.99";
+    return "CHF 19.99";
   }
 }
