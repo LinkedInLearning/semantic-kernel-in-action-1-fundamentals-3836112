@@ -46,10 +46,100 @@ public class ResearcherProject
         kernel,
         webSearchEnginePluginName,
         topicOfResearch,
-        10,
+        35,
         false);
 
+    var outcome = await ProcessAndSummarizeSearchResults(kernel, webSearchResults, topicOfResearch);
+
   }
+
+
+  private async Task<string> ProcessAndSummarizeSearchResults(
+    Kernel kernel,
+    List<WebSearchResult> webSearchResults,
+    string topicOfResearch)
+  {
+    string summarizeWebSearch = @"
+            {{set ""searchResults"" (concat  ""---\n"" "" Search Results \n Topic: "" topicOfResearch ""\n---\n"")}}
+
+            {{#each webSearchResults}}
+                {{set ""summary"" (WebSearchAnalysis-Summarize this.Name this.Snippet )}}
+                {{set ""searchResults"" (concat searchResults ""URL: "" this.Url  ""\n"")}}
+                {{set ""searchResults"" (concat searchResults ""Name: "" this.Name  ""\n"")}}                  
+                {{set ""score"" (WebSearchAnalysis-DetermineRelevance topicOfResearch this.Name this.Snippet )}}
+                {{set ""searchResults"" (concat searchResults ""Relevance: "" score  ""\n"")}}               
+                {{set ""searchResults"" (concat searchResults ""Summary: "" summary  ""\n"")}}
+                {{set ""searchResults"" (concat searchResults ""---\n"")}}                  
+            {{/each}}
+
+            {{set ""reportForResearchTopic"" (WebSearchAnalysis-GenerateResearchReport topicofresearch=topicOfResearch searchresults=searchResults)}}
+
+            Your goal is to provide the search results as they are provided next.
+            Just OUTPUT The following search results as is, do not modify anything:
+            {{json reportForResearchTopic}}            
+         ";
+
+    PromptExecutionSettings promptExecutionSettings = new OpenAIPromptExecutionSettings()
+    {
+      MaxTokens = 18000,
+      Temperature = 0.4,
+    };
+
+    var HandlebarsSPromptFunction = kernel.CreateFunctionFromPrompt(
+        new PromptTemplateConfig()
+        {
+          Template = summarizeWebSearch,
+          TemplateFormat = "handlebars",
+          ExecutionSettings = {
+                  {
+                      "default",
+                      new OpenAIPromptExecutionSettings() {
+                          MaxTokens = 18000,
+                          Temperature = 0.3
+                      }
+                  }
+              }
+        },
+          new HandlebarsPromptTemplateFactory()
+        );
+
+    // Time it
+    var sw = new Stopwatch();
+    sw.Start();
+
+    // Invoke prompt
+    var customHandlebarsPromptResult = await kernel.InvokeAsync(
+                HandlebarsSPromptFunction,
+                new() {
+                        { "webSearchResults", webSearchResults.Take(35) },
+                        { "topicOfResearch", topicOfResearch }
+                }
+            );
+
+    // Stop the timer
+    sw.Stop();
+
+    Console.WriteLine($"OUTCOME  \n");
+    Console.WriteLine($"Milliseconds: {sw.ElapsedMilliseconds} \n");
+    long totalMilliseconds = sw.ElapsedMilliseconds;
+    long minutes = totalMilliseconds / (1000 * 60);
+    long seconds = (totalMilliseconds / 1000) % 60;
+    long milliseconds = totalMilliseconds % 1000;
+
+    Console.WriteLine($"{minutes} min, {seconds} sec, {milliseconds} ms");
+
+    string resultantString = customHandlebarsPromptResult.GetValue<string>();
+
+    var correctedOutput = resultantString.Replace("\\n", "\n");
+
+    // Store to file
+    await File.WriteAllTextAsync(searchResultsSummarizedFileName, correctedOutput);
+
+    Console.WriteLine($" Result: {correctedOutput}");
+
+    return resultantString;
+  }
+
 
   private static async Task<List<WebSearchResult>> SearchWithPlugin(
       Kernel kernel,

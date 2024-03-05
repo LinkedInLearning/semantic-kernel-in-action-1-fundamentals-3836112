@@ -26,7 +26,7 @@ public class AgentCollaborationPractice
         Track(
             await new AgentBuilder()
                 .WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)
-                .WithInstructions("You are a professional editor with a profound expertise in crafting and refining content for marketing. You aredeeply passionate about the intersection of technology and storytelling and love when words ryhme together. Your goal is to determine if a marketing slogan is acceptable, even if it isn't perfect.  If not, provide constructive insights on how to improve the slogan without providing an example.  Respond to the most recent message by evaluating and providing feedback without giving any example.  Always repeat the slogan at the beginning.  If the slogan is is acceptable and meets your criteria, say: I APPROVE.")
+                .WithInstructions("You are a professional editor with a profound expertise in crafting and refining content for marketing. You are deeply passionate about the intersection of technology and storytelling and love when words ryhme together. Your goal is to determine if a marketing slogan is acceptable, even if it isn't perfect.  If not, provide constructive insights on how to improve the slogan without providing an example.  Respond to the most recent message by evaluating and providing feedback without giving any example.  Always repeat the slogan at the beginning.  If the slogan is is acceptable and meets your criteria, say: I APPROVE.")
                 .WithName("Marketing Editor")
                 .WithDescription("Marketing Editor")
                 .BuildAsync());

@@ -1,0 +1,39 @@
+Title: "The Week in Review: Latest Generative AI Models and Advancements"
+
+Summary: 
+The past week has seen a flurry of activity in the field of Generative AI, with several notable advancements and collaborations taking place. Key players in the tech industry, such as Figure AI, Microsoft, Apple, Google Cloud, and Amazon, have made significant strides in advancing and implementing generative AI technology. Additionally, there has been an increased interest in integrating AI into various industries, from telecommunications to legal work. Amid these developments, there has also been a focus on the potential future of human interactions with generative AI, with a shift towards more autonomous, goal-driven agents being predicted.
+
+Relevant points:
+
+1. Figure AI has raised $675 million in a Series B funding round for the development of their ChatGPT robot, Ideogram Gen AI, with significant investors including Microsoft and OpenAI.
+
+2. Microsoft has entered a strategic partnership with French startup, Mistral AI, to diversify its reliance on OpenAI and facilitate the development of the next generation of chatbots and other forms of generative AI.
+
+3. Apple has announced plans to make significant advancements in the field of generative AI, with a commitment to "break new ground".
+
+4. Google Cloud has announced the general availability of a series of generative AI-fueled data management and analytics capabilities.
+
+5. Amazon has developed Amazon Bedrock, a foundation for generative AI that aims to streamline the path to building AI applications.
+
+6. Qualcomm has introduced advanced AI features for Android, including LLaVA, a multimodal Language Learning Model (LLM) with over 7 billion parameters, and LoRA, a tool designed to generate images on a device.
+
+7. Webex AI is leveraging advanced models to create a unique, integrative, real-time media experience, including a Large Language Model component that offers advanced language intelligence.
+
+8. Amdocs has extended its strategic alliance with Microsoft, fueling generative AI innovation throughout the telecommunications industry.
+
+9. SambaNova, a promising AI chip startup, is launching a competitive generative AI product after amassing over $1.1 billion in venture capital.
+
+Reference URLs:
+1. https://www.technologyreview.com/2024/02/29/1089152/generative-ai-differentiating-disruptors-from-the-disrupted/
+2. https://www.forbes.com/sites/charliefink/2024/03/01/675-million-for-humanoid-chatgpt-robot-ideogram-gen-ai-raises-80-million/
+3. https://aimresearch.co/market-industry/generative-ai/gen-ai-innovations-weekly-exploring-the-top-generative-ai-developments
+4. https://techcrunch.com/tag/generative-ai/
+5. https://www.gartner.com/en/documents/5236863
+6. https://apnews.com/hub/generative-ai
+7. https://www.techradar.com/computing/apple-says-itll-break-new-ground-in-generative-ai-heres-what-to-expect
+8. https://www.google.com/search?q=Google+Cloud+unveils+new+GenAI-fueled+data%2C+analytics+tools
+9. https://www.infoworld.com/article/3712963/amazon-bedrock-a-solid-generative-ai-foundation.html
+10. https://www.qualcomm.com/news/releases/2024/02/28/qualcomm-announces-advancements-artificial-intelligence-ai-and-5g-mobile
+11. https://www.webex.com/us/en/ai/index.html
+12. https://www.amdocs.com/media-room/amdocs-microsoft-expand-strategic-alliance-accelerate-communications-industrys-move-cloud
+13. https://techcrunch.com/2021/03/03/sambanova-raises-676m-for-its-ai-chips-and-systems/
