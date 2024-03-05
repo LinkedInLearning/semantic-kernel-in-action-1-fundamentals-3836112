@@ -16,7 +16,6 @@
   // 	"description": "Log output to console"
   // }
   "sk01": {
-    "scope": "snippets",
     "prefix": "sk01",
     "body": [
       "{",
@@ -43,7 +42,6 @@
     ]
   },
   "sk02": {
-    "scope": "snippets",
     "prefix": "sk02",
     "body": [
       "[SUMMARIZATION RULES]",
@@ -72,7 +70,6 @@
     ]
   },
   "sk03": {
-    "scope": "snippets",
     "prefix": "sk03",
     "body": [
       "<ItemGroup>",
@@ -96,6 +93,20 @@
       "var modelDeploymentName = \"Gpt4v32k\";",
       "var azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
       "var azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");"
+    ]
+  },
+  "sk06": {
+    "scope": "csharp",
+    "prefix": "sk06",
+    "body": [
+      "var builder = Kernel.CreateBuilder();",
+      "builder.Services.AddAzureOpenAIChatCompletion(",
+      "    modelDeploymentName,",
+      "    azureOpenAIEndpoint,",
+      "    azureOpenAIApiKey,",
+      "    modelId: \"gpt-4-32k\"",
+      ");",
+      "var kernel = builder.Build();"
     ]
   }
 }
