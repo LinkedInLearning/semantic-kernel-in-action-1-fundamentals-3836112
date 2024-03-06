@@ -1,0 +1,81 @@
+{
+	"sk01": {
+		"scope": "csharp",
+		"prefix": "sk01",
+		"body": [
+			"public class WhatDateIsIt",
+			"{",
+			"\t[KernelFunction, Description(\"Get the current date\")]",
+			"\tpublic string Date(IFormatProvider? formatProvider = null) =>",
+			"\t\t\tDateTimeOffset.UtcNow.ToString(\"D\", formatProvider);",
+			"}"
+		]
+	},
+	"sk02": {
+		"scope": "csharp",
+		"prefix": "sk02",
+		"body": [
+			"\t\tvar modelDeploymentName = \"Gpt4v32k\";",
+			"\t\tvar azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
+			"\t\tvar azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");",
+			"",
+			"\t\tvar builder = Kernel.CreateBuilder();",
+			"\t\tbuilder.Services.AddAzureOpenAIChatCompletion(",
+			"\t\t\t\tmodelDeploymentName,",
+			"\t\t\t\tazureOpenAIEndpoint,",
+			"\t\t\t\tazureOpenAIApiKey,",
+			"\t\t\t\tmodelId: \"gpt-4-32k\"",
+			"\t\t);",
+			"\t\tvar kernel = builder.Build();"
+		]
+	},
+	"sk03": {
+		"scope": "csharp",
+		"prefix": "sk03",
+		"body": [
+			"\t\tKernelFunction kernelFunctionRespondAsScientific =",
+			"\t\t\t\tKernelFunctionFactory.CreateFromPrompt(",
+			"\t\t\t\t\t\t\"Respond to the user question as if you were a Scientific. Respond to it as you were him, showing your personality\",",
+			"\t\t\t\t\t\tfunctionName: \"RespondAsScientific\",",
+			"\t\t\t\t\t\tdescription: \"Responds to a question as a Scientific.\");",
+			"",
+			"\t\tKernelFunction kernelFunctionRespondAsPoliceman =",
+			"\t\t\t\tKernelFunctionFactory.CreateFromPrompt(",
+			"\t\t\t\t\t\t\"Respond to the user question as if you were a Policeman. Respond to it as you were him, showing your personality, humor and level of intelligence.\",",
+			"\t\t\t\t\t\tfunctionName: \"RespondAsPoliceman\",",
+			"\t\t\t\t\t\tdescription: \"Responds to a question as a Policeman.\");",
+			"",
+			"\t\tKernelPlugin roleOpinionsPlugin =",
+			"\t\t\t\tKernelPluginFactory.CreateFromFunctions(",
+			"\t\t\t\t\t\t\"RoleTalk\",",
+			"\t\t\t\t\t\t\"Responds to questions or statements asuming different roles.\",",
+			"\t\t\t\t\t\tnew[] {",
+			"\t\t\t\t\t\t\t\t\t\tkernelFunctionRespondAsScientific,",
+			"\t\t\t\t\t\t\t\t\t\tkernelFunctionRespondAsPoliceman",
+			"\t\t\t\t\t\t\t\t\t});",
+			"\t\tkernel.Plugins.Add(roleOpinionsPlugin);",
+			"\t\tkernel.Plugins.AddFromType<WhatDateIsIt>();"
+		]
+	},
+	"sk04": {
+		"scope": "csharp",
+		"prefix": "sk04",
+		"body": [
+			"\t\tstring userPrompt = \"I just woke up and found myself in the middle of nowhere, \" +",
+			"\t\t\t\t\"do you know what date is it? and what would a policeman and a scientist do in my place?\" +",
+			"\t\t\t\t\"Please provide me the date using the WhatDateIsIt plugin and the Date function, and then \" +",
+			"\t\t\t\t\"the responses from the policeman and the scientist, on this order. \" +",
+			"\t\t\t\t\"For this two responses, use the RoleTalk plugin and the RespondAsPoliceman and RespondAsScientific functions.\";"
+		]
+	},
+	"sk06": {
+		"scope": "csharpç",
+		"prefix": "sk06",
+		"body": [
+			"\t\tvar result = await kernel.InvokePromptAsync(",
+			"\t\t\t\tuserPrompt,",
+			"\t\t\t\tnew(openAIPromptExecutionSettings));",
+			""
+		]
+	}
+}

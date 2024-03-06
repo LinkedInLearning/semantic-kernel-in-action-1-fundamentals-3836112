@@ -1,0 +1,79 @@
+{
+	"sk01": {
+		"scope": "csharp",
+		"prefix": "sk01",
+		"body": [
+			"\t\tvar modelDeploymentName = \"Gpt4v32k\";",
+			"\t\tvar embeddingModelDeploymentName = \"ada-02-embedding\";",
+			"\t\tvar azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
+			"\t\tvar azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");",
+			"",
+			"#pragma warning disable SKEXP0011",
+			"#pragma warning disable SKEXP0003",
+			"#pragma warning disable SKEXP0021",
+			"#pragma warning disable SKEXP0052",
+			"\t\tvar kernel = Kernel.CreateBuilder()",
+			"\t\t\t\t.AddAzureOpenAIChatCompletion(",
+			"\t\t\t\t\t\tmodelDeploymentName,",
+			"\t\t\t\t\t\tazureOpenAIEndpoint,",
+			"\t\t\t\t\t\tazureOpenAIApiKey,",
+			"\t\t\t\t\t\tmodelId: \"gpt-4-32k\")",
+			"\t\t\t\t.Build();"
+		]
+	},
+	"sk02": {
+		"scope": "csharp",
+		"prefix": "sk02",
+		"body": [
+			"\t\tIMemoryStore memoryStore = new VolatileMemoryStore();",
+			"",
+			"\t\tISemanticTextMemory textMemory = new MemoryBuilder()",
+			"\t\t\t\t.WithAzureOpenAITextEmbeddingGeneration(",
+			"\t\t\t\t\t\tembeddingModelDeploymentName,",
+			"\t\t\t\t\t\tazureOpenAIEndpoint,",
+			"\t\t\t\t\t\tazureOpenAIApiKey)",
+			"\t\t\t\t\t\t.WithMemoryStore(memoryStore)",
+			"\t\t\t\t\t\t.Build();"
+		]
+	},
+	"sk03": {
+		"scope": "csharp",
+		"prefix": "sk03",
+		"body": [
+			"\t\t// Adding some memories",
+			"\t\tawait kernel.InvokeAsync(memoryPlugin[\"Save\"], new()",
+			"\t\t{",
+			"\t\t\t[TextMemoryPlugin.InputParam] = \"I live in Zurich. \",",
+			"\t\t\t[TextMemoryPlugin.CollectionParam] = MemoryCollectionName,",
+			"\t\t\t[TextMemoryPlugin.KeyParam] = \"info5\",",
+			"\t\t});",
+			"",
+			"\t\tawait kernel.InvokeAsync(memoryPlugin[\"Save\"], new()",
+			"\t\t{",
+			"\t\t\t[TextMemoryPlugin.InputParam] = \"I love learning, AI, XR and complex challenges. \",",
+			"\t\t\t[TextMemoryPlugin.CollectionParam] = MemoryCollectionName,",
+			"\t\t\t[TextMemoryPlugin.KeyParam] = \"info6\",",
+			"\t\t});"
+		]
+	},
+	"sk04": {
+		"scope": "csharp",
+		"prefix": "sk04",
+		"body": [
+			"\t\t// Recalling memories",
+			"\t\t// string ask = \"Where do I live?\";",
+			"\t\tstring ask = \"What do I love?\";",
+			"\t\tConsole.WriteLine(\\$\"Ask: {ask}\");",
+			"",
+			"\t\tvar result = await kernel.InvokeAsync(memoryPlugin[\"Recall\"], new()",
+			"\t\t{",
+			"\t\t\t[TextMemoryPlugin.InputParam] = ask,",
+			"\t\t\t[TextMemoryPlugin.CollectionParam] = MemoryCollectionName,",
+			"\t\t\t[TextMemoryPlugin.LimitParam] = \"2\",",
+			"\t\t\t[TextMemoryPlugin.RelevanceParam] = \"0.79\",",
+			"\t\t});",
+			"",
+			"\t\tConsole.WriteLine(\\$\"Answer: {result.GetValue<string>()}\");"
+		]
+	}
+}

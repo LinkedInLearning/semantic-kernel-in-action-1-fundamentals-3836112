@@ -1,0 +1,159 @@
+{
+	"sk01": {
+		"scope": "xml",
+		"prefix": "sk01",
+		"body": [
+			"\t<ItemGroup>",
+			"\t\t<Content Include=\"plugins\\**\\*.*\">",
+			"\t\t\t<CopyToOutputDirectory>Always</CopyToOutputDirectory>",
+			"\t\t</Content>",
+			"\t</ItemGroup>"
+		]
+	},
+	"sk02": {
+		"scope": "csharp",
+		"prefix": "sk02",
+		"body": [
+			"\t\tvar modelDeploymentName = \"Gpt4v32k\";",
+			"\t\tvar azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
+			"\t\tvar azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");",
+			"",
+			"\t\tvar builder = Kernel.CreateBuilder();",
+			"\t\tbuilder.Services.AddAzureOpenAIChatCompletion(",
+			"\t\t\t\tmodelDeploymentName,",
+			"\t\t\t\tazureOpenAIEndpoint,",
+			"\t\t\t\tazureOpenAIApiKey,",
+			"\t\t\t\tmodelId: \"gpt-4-32k\"",
+			"\t\t);",
+			"\t\tvar kernel = builder.Build();"
+		]
+	},
+	"sk03": {
+		"scope": "csharp",
+		"prefix": "sk03",
+		"body": [
+			"\t\tvar pluginDirectory = Path.Combine(",
+			"\t\t\t\tSystem.IO.Directory.GetCurrentDirectory(),",
+			"\t\t\t\t\"plugins\",",
+			"\t\t\t\t\"RoleTalk\");",
+			"\t\tkernel.ImportPluginFromPromptDirectory(pluginDirectory);"
+		]
+	},
+	"sk04A": {
+		"scope": "json",
+		"prefix": "sk04A",
+		"body": [
+			"{",
+			"\t\"schema\": 1,",
+			"\t\"description\": \"Respond to a question or statement as a Police Officer\",",
+			"\t\"execution_settings\": {",
+			"\t\t\"default\": {",
+			"\t\t\t\"max_tokens\": 1512,",
+			"\t\t\t\"temperature\": 0.5,",
+			"\t\t\t\"top_p\": 0.0,",
+			"\t\t\t\"presence_penalty\": 0.0,",
+			"\t\t\t\"frequency_penalty\": 0.0",
+			"\t\t}",
+			"\t},",
+			"\t\"input_variables\": [",
+			"\t\t{",
+			"\t\t\t\"name\": \"input\",",
+			"\t\t\t\"description\": \"Text to respond to\",",
+			"\t\t\t\"default\": \"\",",
+			"\t\t\t\"is_required\": true",
+			"\t\t}",
+			"\t]",
+			"}"
+		]
+	},
+	"sk04B": {
+		"prefix": "sk04B",
+		"body": [
+			"Respond to a question or statement as a policeman",
+			"Respond to the user question as if you were a policeman.",
+			"Show your personality and the way you would respond to the question.",
+			"",
+			"Respond to the question or statement as you were him, showing your personality.",
+			"Respond starting with \"As a policeman, I think that...\"",
+			"",
+			"The question or statement:",
+			"{{\\$input}}"
+		]
+	},
+	"sk05A": {
+		"scope": "json",
+		"prefix": "sk05A",
+		"body": [
+			"{",
+			"\t\"schema\": 1,",
+			"\t\"description\": \"Respond to a question or statement as a scientist.\",",
+			"\t\"execution_settings\": {",
+			"\t\t\"default\": {",
+			"\t\t\t\"max_tokens\": 1512,",
+			"\t\t\t\"temperature\": 0.6,",
+			"\t\t\t\"top_p\": 0.0,",
+			"\t\t\t\"presence_penalty\": 0.0,",
+			"\t\t\t\"frequency_penalty\": 0.0",
+			"\t\t}",
+			"\t},",
+			"\t\"input_variables\": [",
+			"\t\t{",
+			"\t\t\t\"name\": \"input\",",
+			"\t\t\t\"description\": \"Text to respond to\",",
+			"\t\t\t\"default\": \"\",",
+			"\t\t\t\"is_required\": true",
+			"\t\t}",
+			"\t]",
+			"}"
+		]
+	},
+	"sk05B": {
+		"prefix": "sk05B",
+		"body": [
+			"Respond to a question or statement as a scientific",
+			"Respond to the user question as if you were a seasoned scientific, used to think in an analytic way.",
+			"Respond starting with \"As a scientific, I think that...\"",
+			"",
+			"The question or statement:",
+			"{{\\$input}}",
+			""
+		]
+	},
+	"sk06": {
+		"scope": "csharp",
+		"prefix": "sk06",
+		"body": [
+			"\t\tstring question = \"What's the best way to deal with a city-wide power outage?\";",
+			"\t\tvar chainingFunctionsWithHandlebarsFunction = kernel.CreateFunctionFromPrompt(",
+			"\t\t\t\tnew()",
+			"\t\t\t\t{",
+			"\t\t\t\t\tTemplate = @\"",
+			"\t\t\t\t\t\t\t\t{{set \"\"responseAsPoliceman\"\" (RoleTalk-RespondAsPoliceman input) }}",
+			"\t\t\t\t\t\t\t\t{{set \"\"responseAsScientific\"\" (RoleTalk-RespondAsScientist input) }}",
+			"\t\t\t\t\t\t\t\t{{set \"\"opinionFromScientificToPoliceman\"\" (RoleTalk-RespondAsScientist responseAsPoliceman) }}",
+			"",
+			"\t\t\t\t\t\t\t\t{{!-- Example of concatenating text and variables to finally output it with json --}}",
+			"\t\t\t\t\t\t\t\t{{set \"\"finalOutput\"\" (concat \"\"Policeman: \"\" responseAsPoliceman \"\" Scientific: \"\" responseAsScientific\t\"\" Scientific to Policeman: \"\" opinionFromScientificToPoliceman)}}",
+			"\t\t\t\t\t\t\t\t",
+			"\t\t\t\t\t\t\t\tOutput the following responses as is, do not modify anything:",
+			"\t\t\t\t\t\t\t\t{{json finalOutput}}",
+			"\t\t\t\t\t\t\t\t\",",
+			"\t\t\t\t\tTemplateFormat = \"handlebars\"",
+			"\t\t\t\t},",
+			"\t\t\t\tnew HandlebarsPromptTemplateFactory()",
+			"\t\t);"
+		]
+	},
+	"sk07": {
+		"scope": "csharp",
+		"prefix": "sk07",
+		"body": [
+			"\t\tvar resp =",
+			"\t\t\t\tawait kernel.InvokeAsync(",
+			"\t\t\t\t\t\tchainingFunctionsWithHandlebarsFunction,",
+			"\t\t\t\t\t\tnew() {",
+			"\t\t\t\t\t\t\t\t\t\t{ \"input\", question }",
+			"\t\t\t\t\t\t});"
+		]
+	}
+}

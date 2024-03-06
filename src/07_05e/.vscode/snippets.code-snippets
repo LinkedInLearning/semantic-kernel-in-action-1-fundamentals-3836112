@@ -1,0 +1,31 @@
+{
+	"sk01": {
+		"scope": "xml",
+		"prefix": "sk01",
+		"body": [
+			"\t<ItemGroup>",
+			"\t\t<Content Include=\"plugins\\**\\*.*\">",
+			"\t\t\t<CopyToOutputDirectory>Always</CopyToOutputDirectory>",
+			"\t\t</Content>",
+			"\t</ItemGroup>"
+		]
+	},
+	"sk02": {
+		"scope": "csharp",
+		"prefix": "sk02",
+		"body": [
+			"\t\tvar modelDeploymentName = \"Gpt4v32k\";",
+			"\t\tvar azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
+			"\t\tvar azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");",
+			"",
+			"\t\tvar builder = Kernel.CreateBuilder();",
+			"\t\tbuilder.Services.AddAzureOpenAIChatCompletion(",
+			"\t\t\t\tmodelDeploymentName,",
+			"\t\t\t\tazureOpenAIEndpoint,",
+			"\t\t\t\tazureOpenAIApiKey,",
+			"\t\t\t\tmodelId: \"gpt-4-32k\"",
+			"\t\t);",
+			"\t\tvar kernel = builder.Build();"
+		]
+	}
+}

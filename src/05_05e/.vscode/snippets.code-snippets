@@ -1,0 +1,217 @@
+{
+	"sk01": {
+		"scope": "xml",
+		"prefix": "sk01",
+		"body": [
+			"\t<ItemGroup>",
+			"\t\t<Content Include=\"Agents\\**\\*.*\">",
+			"\t\t\t<CopyToOutputDirectory>Always</CopyToOutputDirectory>",
+			"\t\t</Content>",
+			"\t</ItemGroup>"
+		]
+	},
+	"sk02": {
+		"scope": "yaml",
+		"prefix": "sk02",
+		"body": [
+			"name: Parrot",
+			"template_format: semantic-kernel",
+			"template: |",
+			"\tRepeat the user message in the voice of a parrot and then end with {{\\$count}} parrot sounds that sound funny.",
+			"description: A fun chat agent that repeats the user message like a parrot would.",
+			"input_variables:",
+			"\t- name: count",
+			"\t\tdescription: The number of parrot sounds.",
+			"\t\tis_required: true"
+		]
+	},
+	"sk03": {
+		"scope": "yaml",
+		"prefix": "sk03",
+		"body": [
+			"name: ToolAgent",
+			"template_format: semantic-kernel",
+			"template: |",
+			"\tRespond to the user using the single best tool.",
+			"\tIf no appropiate tool can be found, let the user know you only provide responses using tools.",
+			"\tWhen reporting a tool result, start with, \"The tool I used informed me that\"",
+			"description: Determines if a tool can be used to accomplish a result."
+		]
+	},
+	"sk04": {
+		"scope": "csharp",
+		"prefix": "sk04",
+		"body": [
+			"public sealed class MenuPlugin",
+			"{",
+			"\t[KernelFunction, Description(\"Provides today's menu.\")]",
+			"\t[System.Diagnostics.CodeAnalysis.SuppressMessage(\"Design\", \"CA1024:Use properties where appropriate\")]",
+			"\tpublic string GetMenu()",
+			"\t{",
+			"\t\treturn @\"",
+			"\t\t\t\t\t\tStarters: Tom ka gay soup",
+			"\t\t\t\t\t\tMain dish: Eye Steak with veggies",
+			"\t\t\t\t\t\tDessert: Mango with Rice",
+			"\t\t\t\t\t\t\";",
+			"\t}",
+			"",
+			"\t[KernelFunction, Description(\"Provides the price of the requested menu item.\")]",
+			"\tpublic string GetItemPrice(",
+			"\t\t\t[Description(\"The name of the menu item.\")]",
+			"\t\t\t\t\t\tstring menuItem)",
+			"\t{",
+			"\t\treturn \"CHF 19.99\";",
+			"\t}",
+			"}"
+		]
+	},
+	"sk05": {
+		"scope": "xml",
+		"prefix": "sk05",
+		"body": [
+			"\t<ItemGroup>",
+			"\t\t<Content Include=\"Agents\\**\\*.*\">",
+			"\t\t\t<CopyToOutputDirectory>Always</CopyToOutputDirectory>",
+			"\t\t</Content>",
+			"\t</ItemGroup>"
+		]
+	},
+	"sk06": {
+		"scope": "csharp",
+		"prefix": "sk06",
+		"body": [
+			"\t\tvar openAIFunctionEnabledModelId = \"gpt-4-turbo-preview\";",
+			"\t\tvar openAIApiKey = Environment.GetEnvironmentVariable(\"OPENAI_APIKEY\");",
+			"\t\tvar builder = Kernel.CreateBuilder();",
+			"\t\tbuilder.Services.AddOpenAIChatCompletion(",
+			"\t\t\t\topenAIFunctionEnabledModelId,",
+			"\t\t\t\topenAIApiKey);",
+			"\t\tvar kernel = builder.Build();"
+		]
+	},
+	"sk07": {
+		"scope": "csharp",
+		"prefix": "sk07",
+		"body": [
+			"\t\t// Preparation for agents creation",
+			"\t\tvar menuPlugin = KernelPluginFactory.CreateFromType<MenuPlugin>();",
+			"\t\tvar pathToParrotAgent = Path.Combine(System.IO.Directory.GetCurrentDirectory(), \"Agents\", \"ParrotAgent.yaml\");",
+			"\t\tvar pathToToolAgent = Path.Combine(System.IO.Directory.GetCurrentDirectory(), \"Agents\", \"ToolAgent.yaml\");"
+		]
+	},
+	"sk08": {
+		"scope": "csharp",
+		"prefix": "sk08",
+		"body": [
+			"\t\t// Create agents",
+			"\t\tvar menuAgent =",
+			"\t\t\t\tTrack(",
+			"\t\t\t\t\t\tawait new AgentBuilder()",
+			"\t\t\t\t\t\t\t\t.WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)",
+			"\t\t\t\t\t\t\t\t.FromTemplatePath(pathToToolAgent)",
+			"\t\t\t\t\t\t\t\t.WithDescription(\"Answer questions about the menu by using the menuPlugin tool.\")",
+			"\t\t\t\t\t\t\t\t.WithPlugin(menuPlugin)",
+			"\t\t\t\t\t\t\t\t.BuildAsync());",
+			"",
+			"\t\tvar parrotAgent =",
+			"\t\t\t\tTrack(",
+			"\t\t\t\t\t\tawait new AgentBuilder()",
+			"\t\t\t\t\t\t\t\t.WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)",
+			"\t\t\t\t\t\t\t\t.FromTemplatePath(pathToParrotAgent)",
+			"\t\t\t\t\t\t\t\t.BuildAsync());",
+			"",
+			"\t\tvar toolAgent =",
+			"\t\t\t\tTrack(",
+			"\t\t\t\t\t\tawait new AgentBuilder()",
+			"\t\t\t\t\t\t\t\t.WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)",
+			"\t\t\t\t\t\t\t\t.FromTemplatePath(pathToToolAgent)",
+			"\t\t\t\t\t\t\t\t.WithPlugin(parrotAgent.AsPlugin())",
+			"\t\t\t\t\t\t\t\t.WithPlugin(menuAgent.AsPlugin())",
+			"\t\t\t\t\t\t\t\t.BuildAsync());"
+		]
+	},
+	"sk09": {
+		"scope": "csharp",
+		"prefix": "sk09",
+		"body": [
+			"\t\tvar messages = new string[]",
+			"\t\t{",
+			"\t\t\t\"What is on today's menu? \",",
+			"\t\t\t\"how much does the Eye Steak with veggies cost? \",",
+			"\t\t\t\"Can you talk like pirate?\",",
+			"\t\t\t\"Thank you\",",
+			"\t\t};",
+			"",
+			"\t\t// note that threads aren't attached to specific agents",
+			"\t\t_agentsThread = await toolAgent.NewThreadAsync();"
+		]
+	},
+	"sk10": {
+		"scope": "csharp",
+		"prefix": "sk10",
+		"body": [
+			"\t\ttry",
+			"\t\t{",
+			"\t\t\tforeach (var message in messages)",
+			"\t\t\t{",
+			"\t\t\t\tvar responseMessages =",
+			"\t\t\t\t\tawait _agentsThread.InvokeAsync(toolAgent, message).ToArrayAsync();",
+			"",
+			"\t\t\t\tDisplayMessages(responseMessages, toolAgent);",
+			"\t\t\t}",
+			"\t\t}",
+			"\t\tfinally",
+			"\t\t{",
+			"\t\t\tawait CleanUpAsync();",
+			"\t\t}"
+		]
+	},
+	"sk11": {
+		"scope": "csharp",
+		"prefix": "sk11",
+		"body": [
+			"\tprivate IAgent Track(IAgent agent)",
+			"\t{",
+			"\t\t_agents.Add(agent);",
+			"",
+			"\t\treturn agent;",
+			"\t}",
+			"",
+			"\tprivate void DisplayMessages(IEnumerable<IChatMessage> messages, IAgent? agent = null)",
+			"\t{",
+			"\t\tforeach (var message in messages)",
+			"\t\t{",
+			"\t\t\tDisplayMessage(message, agent);",
+			"\t\t}",
+			"\t}",
+			"",
+			"\tprivate void DisplayMessage(IChatMessage message, IAgent? agent = null)",
+			"\t{",
+			"\t\tConsole.WriteLine(\\$\"[{message.Id}]\");",
+			"\t\tif (agent != null)",
+			"\t\t{",
+			"\t\t\tConsole.WriteLine(\\$\"# {message.Role}: ({agent.Name}) {message.Content}\");",
+			"\t\t}",
+			"\t\telse",
+			"\t\t{",
+			"\t\t\tConsole.WriteLine(\\$\"# {message.Role}: {message.Content}\");",
+			"\t\t}",
+			"\t}",
+			"\tprivate async Task CleanUpAsync()",
+			"\t{",
+			"\t\tif (_agentsThread != null)",
+			"\t\t{",
+			"\t\t\t_agentsThread.DeleteAsync();",
+			"\t\t\t_agentsThread = null;",
+			"\t\t}",
+			"",
+			"\t\tif (_agents.Any())",
+			"\t\t{",
+			"\t\t\tawait Task.WhenAll(_agents.Select(agent => agent.DeleteAsync()));",
+			"\t\t\t_agents.Clear();",
+			"\t\t}",
+			"\t}",
+			""
+		]
+	}
+}

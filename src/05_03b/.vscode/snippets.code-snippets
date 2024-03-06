@@ -1,0 +1,153 @@
+{
+	"sk01": {
+		"scope": "xml",
+		"prefix": "sk01",
+		"body": [
+			"\t<ItemGroup>",
+			"\t\t<Content Include=\"plugins\\**\\*.*\">",
+			"\t\t\t<CopyToOutputDirectory>Always</CopyToOutputDirectory>",
+			"\t\t</Content>",
+			"\t</ItemGroup>"
+		]
+	},
+	"sk02": {
+		"scope": "csharp",
+		"prefix": "sk02",
+		"body": [
+			"\t\tvar modelDeploymentName = \"Gpt4v32k\";",
+			"\t\tvar azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
+			"\t\tvar azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");",
+			"",
+			"\t\tvar builder = Kernel.CreateBuilder();",
+			"\t\tbuilder.Services.AddAzureOpenAIChatCompletion(",
+			"\t\t\t\tmodelDeploymentName,",
+			"\t\t\t\tazureOpenAIEndpoint,",
+			"\t\t\t\tazureOpenAIApiKey,",
+			"\t\t\t\tmodelId: \"gpt-4-32k\"",
+			"\t\t);",
+			"\t\tvar kernel = builder.Build();"
+		]
+	},
+	"sk03": {
+		"scope": "yaml",
+		"prefix": "sk03",
+		"body": [
+			"name: Parrot",
+			"template_format: semantic-kernel",
+			"template: |",
+			"\tRepeat the user message in the voice of a parrot and then end with {{\\$count}} parrot sounds that sound funny.",
+			"description: A fun chat agent that repeats the user message like a parrot would.",
+			"input_variables:",
+			"\t- name: count",
+			"\t\tdescription: The number of parrot sounds.",
+			"\t\tis_required: true"
+		]
+	},
+	"sk04": {
+		"scope": "xml",
+		"prefix": "sk04",
+		"body": [
+			"<NoWarn>SKEXP0003, SKEXP0004, SKEXP0011, SKEXP0052, SKEXP0060, SKEXP0061</NoWarn> "
+		]
+	},
+	"sk05": {
+		"scope": "csharp",
+		"prefix": "sk05",
+		"body": [
+			"\t<ItemGroup>",
+			"\t\t<Content Include=\"Agents\\**\\*.*\">",
+			"\t\t\t<CopyToOutputDirectory>Always</CopyToOutputDirectory>",
+			"\t\t</Content>",
+			"\t</ItemGroup>"
+		]
+	},
+	"sk06": {
+		"scope": "csharp",
+		"prefix": "sk06",
+		"body": [
+			"\t\tvar openAIFunctionEnabledModelId = \"gpt-4-turbo-preview\";",
+			"\t\tvar openAIApiKey = Environment.GetEnvironmentVariable(\"OPENAI_APIKEY\");",
+			"\t\tvar builder = Kernel.CreateBuilder();",
+			"\t\tbuilder.Services.AddOpenAIChatCompletion(",
+			"\t\t\t\topenAIFunctionEnabledModelId,",
+			"\t\t\t\topenAIApiKey);",
+			"\t\tvar kernel = builder.Build();"
+		]
+	},
+	"sk07": {
+		"scope": "csharp",
+		"prefix": "sk07",
+		"body": [
+			"\t\t// create agent in code",
+			"\t\tvar codeAgent = await new AgentBuilder()",
+			"\t\t\t\t\t\t\t\t\t\t.WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)",
+			"\t\t\t\t\t\t\t\t\t\t.WithInstructions(\"Repeat the user message in the voice of a pirate \" +",
+			"\t\t\t\t\t\t\t\t\t\t\"and then end with parrot sounds.\")",
+			"\t\t\t\t\t\t\t\t\t\t.WithName(\"CodeParrot\")",
+			"\t\t\t\t\t\t\t\t\t\t.WithDescription(\"A fun chat bot that repeats the user message in the\" +",
+			"\t\t\t\t\t\t\t\t\t\t\" voice of a pirate.\")",
+			"\t\t\t\t\t\t\t\t\t\t.BuildAsync();",
+			"\t\t_agents.Add(codeAgent);"
+		]
+	},
+	"sk08": {
+		"scope": "csharp",
+		"prefix": "sk08",
+		"body": [
+			"\t\t// Create agent from file",
+			"\t\tvar pathToPlugin = Path.Combine(Directory.GetCurrentDirectory(), \"Agents\", \"ParrotAgent.yaml\");",
+			"\t\tstring agentDefinition = File.ReadAllText(pathToPlugin);",
+			"\t\tvar fileAgent = await new AgentBuilder()",
+			"\t\t\t\t.WithOpenAIChatCompletion(openAIFunctionEnabledModelId, openAIApiKey)",
+			"\t\t\t\t.FromTemplatePath(pathToPlugin)",
+			"\t\t\t\t.BuildAsync();",
+			"\t\t_agents.Add(fileAgent);",
+			""
+		]
+	},
+	"sk09": {
+		"scope": "csharp",
+		"prefix": "sk09",
+		"body": [
+			"\t\ttry",
+			"\t\t{",
+			"\t\t\t// Invoke agent plugin.",
+			"\t\t\tvar response =",
+			"\t\t\t\t\tawait fileAgent.AsPlugin().InvokeAsync(",
+			"\t\t\t\t\t\t\t\"Practice makes perfect.\",",
+			"\t\t\t\t\t\t\tnew KernelArguments { { \"count\", 2 } }",
+			"\t\t\t\t\t);",
+			"",
+			"\t\t\t// Display result.",
+			"\t\t\tConsole.WriteLine(response ?? \\$\"No response from agent: {fileAgent.Id}\");",
+			"\t\t}",
+			"\t\tfinally",
+			"\t\t{",
+			"\t\t\t// Clean-up (storage costs \\$)",
+			"\t\t\tawait CleanUpAsync();",
+			"\t\t\tawait fileAgent.DeleteAsync();",
+			"\t\t\tawait codeAgent.DeleteAsync();",
+			"\t\t}"
+		]
+	},
+	"sk10": {
+		"scope": "csharp",
+		"prefix": "sk10",
+		"body": [
+			"\tprivate async Task CleanUpAsync()",
+			"\t{",
+			"\t\tif (_agentsThread != null)",
+			"\t\t{",
+			"\t\t\t_agentsThread.DeleteAsync();",
+			"\t\t\t_agentsThread = null;",
+			"\t\t}",
+			"",
+			"\t\tif (_agents.Any())",
+			"\t\t{",
+			"\t\t\tawait Task.WhenAll(_agents.Select(agent => agent.DeleteAsync()));",
+			"\t\t\t_agents.Clear();",
+			"\t\t}",
+			"\t}"
+		]
+	}
+}
