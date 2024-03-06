@@ -1,0 +1,45 @@
+{
+  "sk01": {
+    "scope": "csharp",
+    "prefix": "sk01",
+    "body": [
+      "   var modelDeploymentName = \"Gpt4v32k\";",
+      "   var azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
+      "   var azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");",
+      "",
+      "   var builder = Kernel.CreateBuilder();",
+      "   builder.Services.AddAzureOpenAIChatCompletion(",
+      "       modelDeploymentName,",
+      "       azureOpenAIEndpoint,",
+      "       azureOpenAIApiKey,",
+      "       modelId: \"gpt-4-32k\"",
+      "   );",
+      "   var kernel = builder.Build();"
+    ]
+  },
+  "sk02": {
+    "scope": "csharp",
+    "prefix": "sk02",
+    "body": [
+      "    // Create agenda",
+      "    List<string> todaysCalendar = [\"8am - wakeup\", \"9am - work\", \"12am - lunch\", \"1pm - work\", \"6pm - exercise\", \"7pm - study\", \"10pm - sleep\"];",
+      ""
+    ]
+  },
+  "sk03": {
+    "scope": "csharp",
+    "prefix": "sk05",
+    "body": [
+      "   var handlebarsTemplate = @\"",
+      "                   Please explain in a fun way the day agenda",
+      "                   {{ set \"\"dayAgenda\"\" (todaysCalendar)}}",
+      "                   {{ set \"\"whatTimeIsIt\"\" (WhatTimeIsIt-Time) }}",
+      "",
+      "                   {{#each dayAgenda}}",
+      "                       Explain what you are doing at {{this}} in a fun way.",
+      "                   {{/each}}",
+      "",
+      "                   Explain what you will be doing next at {{whatTimeIsIt}} in a fun way.\";"
+    ]
+  }
+}
