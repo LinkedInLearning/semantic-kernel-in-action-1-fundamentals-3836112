@@ -28,7 +28,7 @@
   },
   "sk03": {
     "scope": "csharp",
-    "prefix": "sk05",
+    "prefix": "sk03",
     "body": [
       "   var handlebarsTemplate = @\"",
       "                   Please explain in a fun way the day agenda",
@@ -40,6 +40,46 @@
       "                   {{/each}}",
       "",
       "                   Explain what you will be doing next at {{whatTimeIsIt}} in a fun way.\";"
+    ]
+  },
+  "sk03b": {
+    "scope": "csharp",
+    "prefix": "sk03b",
+    "body": [
+      "public class WhatTimeIsIt",
+      "{",
+      "\t[KernelFunction, Description(\"Get the current time\")]",
+      "\tpublic string Time(IFormatProvider? formatProvider = null) =>",
+      "\t\t\tDateTimeOffset.Now.ToString(\"hh:mm:ss tt\", formatProvider);",
+      "}",
+      ""
+    ]
+  },
+  "sk05": {
+    "scope": "csharp",
+    "prefix": "sk05",
+    "body": [
+      "var todaysFunCalendar = await kernel.InvokeAsync(",
+      "    handlebarsFunction,",
+      "    new() {",
+      "      { \"todaysCalendar\", todaysCalendar }",
+      "    }",
+      ");"
+    ]
+  },
+  "sk04": {
+    "scope": "csharp",
+    "prefix": "sk04",
+    "body": [
+      "\t// Create handlebars template for intent",
+      "\tvar handlebarsFunction = kernel.CreateFunctionFromPrompt(",
+      "\t\tnew PromptTemplateConfig()",
+      "\t\t{",
+      "\t\t  Template = handlebarsTemplate,",
+      "\t\t  TemplateFormat = \"handlebars\"",
+      "\t\t},",
+      "\t\tnew HandlebarsPromptTemplateFactory()",
+      "\t);"
     ]
   }
 }
