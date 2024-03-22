@@ -11,9 +11,9 @@
 			"\tpublic async Task ExecuteAsync()",
 			"\t{",
 			"\t\tvar modelDeploymentName = \"Gpt4v32k\";",
-			"\t\tvar azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AzureOpenAI_Endpoint\", EnvironmentVariableTarget.User);",
-			"\t\tvar azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AzureOpenAI_ApiKey\", EnvironmentVariableTarget.User);",
-			"\t\tstring bingApiKey = Environment.GetEnvironmentVariable(\"Bing_ApiKey\", EnvironmentVariableTarget.User);",
+			"\t\tvar azureOpenAIEndpoint = Environment.GetEnvironmentVariable(\"AZUREOPENAI_ENDPOINT\");",
+			"\t\tvar azureOpenAIApiKey = Environment.GetEnvironmentVariable(\"AZUREOPENAI_APIKEY\");",
+			"\t\tstring bingApiKey = Environment.GetEnvironmentVariable(\"BING_APIKEY\");",
 			"",
 			"\t\tvar builder = Kernel.CreateBuilder();",
 			"\t\tbuilder.Services.AddAzureOpenAIChatCompletion(",
@@ -254,6 +254,139 @@
 			"\t\t\t\ttopicOfResearch,",
 			"\t\t\t\t10,",
 			"\t\t\t\tfalse);"
+		]
+	},
+	"sk09": {
+		"scope": "csharp",
+		"prefix": "sk09",
+		"body": [
+			"\tprivate static async Task AddWebSearchAnalysisPlugin(Kernel kernel)",
+			"\t{",
+			"\t}"
+		]
+	},
+	"sk10": {
+		"scope": "csharp",
+		"prefix": "sk10",
+		"body": [
+			"\t\tPromptExecutionSettings promptExecutionSettings = new OpenAIPromptExecutionSettings()",
+			"\t\t{",
+			"\t\t\tMaxTokens = 8000,",
+			"\t\t\tTemperature = 0.5,",
+			"\t\t};"
+		]
+	},
+	"sk11": {
+		"scope": "csharp",
+		"prefix": "sk11",
+		"body": [
+			"\t\tvar kernelFunctionDetermineRelevance = kernel.CreateFunctionFromPrompt(",
+			"\t\t\t\tnew PromptTemplateConfig()",
+			"\t\t\t\t{",
+			"\t\t\t\t\tName = \"DetermineRelevance\",",
+			"\t\t\t\t\tDescription = \"Determines the relevance of a concrete web search result.\",",
+			"\t\t\t\t\tTemplate = @\"Provided with a web search result of a Name and a Snippet of the search content, ",
+			"\t\t\t\t\t\t\t\t\t\tanalyze the name and snippet to determine the relevance to the provided topic of research.",
+			"\t\t\t\t\t\t\t\t\t\tTopic of research: {{\\$topicofresearch}},",
+			"\t\t\t\t\t\t\t\t\t\tName: {{\\$name}},",
+			"\t\t\t\t\t\t\t\t\t\tSnippet: {{\\$snippet}},",
+			"\t\t\t\t\t\t\t\t\t\tRespond Only true, being 0 no relevance at all and 10 very relevant.",
+			"\t\t\t\t\t\t\t\t\t\tProvide Just the number, nothing else.\",",
+			"\t\t\t\t\tTemplateFormat = \"semantic-kernel\",",
+			"\t\t\t\t\tInputVariables = [",
+			"\t\t\t\t\t\t\t\tnew() { Name = \"topicofresearch\" },",
+			"\t\t\t\t\t\t\t\tnew() { Name = \"name\" },",
+			"\t\t\t\t\t\t\t\tnew() { Name = \"snippet\" }",
+			"\t\t\t\t\t\t]",
+			"\t\t\t\t});"
+		]
+	},
+	"sk12": {
+		"scope": "csharp",
+		"prefix": "sk12",
+		"body": [
+			"\t\tvar kernelFunctionSummarize = kernel.CreateFunctionFromPrompt(",
+			"\t\t\t\tnew PromptTemplateConfig()",
+			"\t\t\t\t{",
+			"\t\t\t\t\tName = \"Summarize\",",
+			"\t\t\t\t\tDescription = \"Summarizes a concrete web search result.\",",
+			"\t\t\t\t\tTemplate = @\"Provided with a web search result of a Name and a Snippet of the search content, ",
+			"\t\t\t\t\t\t\t\t\t\tSummarize the name and snippet into a short and concise paragraph.",
+			"\t\t\t\t\t\t\t\t\t\tThe paragraph should be a summary of the content of the snippet and the name.",
+			"\t\t\t\t\t\t\t\t\t\tThe summary should contain all the facts, names, and relevant information mentioned in the snippet and name.",
+			"\t\t\t\t\t\t\t\t\t\tName: {{\\$name}},",
+			"\t\t\t\t\t\t\t\t\t\tSnippet: {{\\$snippet}},",
+			"\t\t\t\t\t\t\t\t\t\tDo not add any information which is not present in the snippet and name.\",",
+			"\t\t\t\t\tTemplateFormat = \"semantic-kernel\",",
+			"\t\t\t\t\tInputVariables = [",
+			"\t\t\t\t\t\t\t\tnew() { Name = \"name\" },",
+			"\t\t\t\t\t\t\t\tnew() { Name = \"snippet\" }",
+			"\t\t\t\t\t\t]",
+			"\t\t\t\t});"
+		]
+	},
+	"sk13": {
+		"scope": "csharp",
+		"prefix": "sk13",
+		"body": [
+			"\t\tvar kernelFunctionResearchReportMaker = KernelFunctionFactory.CreateFromPrompt(",
+			"\t\t\t\t\t\t\"You are an expert web researcher report maker.\" +",
+			"\t\t\t\t\t\t\"Your goal is to make a report on a concrete topic and elaborate a report on the provided web findings . \" +",
+			"\t\t\t\t\t\t\"You must produce a concise summary report on the different findings. \" +",
+			"\t\t\t\t\t\t\"You will receive, for each search result:\" +",
+			"\t\t\t\t\t\t\" URL - URL of the web search result.\" +",
+			"\t\t\t\t\t\t\" Name - Name of the web search result.\" +",
+			"\t\t\t\t\t\t\" Relevance - the relevance of the web search result respect the goal.\" +",
+			"\t\t\t\t\t\t\" Summary - A concise summary of the web search result including some of the main points.\" +",
+			"\t\t\t\t\t\t\"With this you will analyze those search results and provide a precise and concise report on the topic, made of:\" +",
+			"\t\t\t\t\t\t\"1. A Title\" +",
+			"\t\t\t\t\t\t\"2. A Summary\" +",
+			"\t\t\t\t\t\t\"3. Relevant findings (news regarding announcements, findings, new releases or other)\" +",
+			"\t\t\t\t\t\t\"4. Reference URLs\" +",
+			"\t\t\t\t\t\t\"For the Title, provide a suitable title which is catchy, fits the topic of research, the summary and the points. \" +",
+			"\t\t\t\t\t\t\"Ideally it should be engaging, compelling and sound a bit poetical.\" +",
+			"\t\t\t\t\t\t\"The summary should be a concise report on all the relevant topics provided by the search results. \" +",
+			"\t\t\t\t\t\t\"The summary will be preceded by 'Summary:'.\" +",
+			"\t\t\t\t\t\t\"After the summary, the relevant points should be made of all the web search results\tordered by importance \" +",
+			"\t\t\t\t\t\t\"and relevance .\" +",
+			"\t\t\t\t\t\t\"If one or more web results are about the same topic please put them together, avoid repetition. \" +",
+			"\t\t\t\t\t\t\"The relevant points must be preceded by 'Relevant points:'.\" +",
+			"\t\t\t\t\t\t\"After this, the Reference URLs must be provided, stating the reference URLs used to make the report, preceded by 'Reference URLs:'\" +",
+			"\t\t\t\t\t\t\"For the summary, use 500 to 1000 words maximum.\" +",
+			"\t\t\t\t\t\t\"\tYou will use short, complete sentences, using active voice. \" +",
+			"\t\t\t\t\t\t\"\tMaximize detail and meaning. Focusing on the content.\" +",
+			"\t\t\t\t\t\t\"\" +",
+			"\t\t\t\t\t\t\"The topic, goal of the report is the following:\" +",
+			"\t\t\t\t\t\t\"---\" +",
+			"\t\t\t\t\t\t\"{{\\$topicofresearch}}\" +",
+			"\t\t\t\t\t\t\"---\" +",
+			"\t\t\t\t\t\t\"Please provide a concise report for this topic using the provided search results as a base.\" +",
+			"\t\t\t\t\t\t\"And here are the search results:\" +",
+			"\t\t\t\t\t\t\"---\" +",
+			"\t\t\t\t\t\t\" {{\\$searchresults}}\" +",
+			"\t\t\t\t\t\t\"---\" +",
+			"\t\t\t\t\t\t\"Please provide a concise report for this topic using the provided search results as a base.\" +",
+			"\t\t\t\t\t\t\"BE SURE YOU LIST THE URLs OF THE SEARCH RESULTS IN THE REFERENCE URLS! DO NOT MISS THIS!!\",",
+			"\t\t\t\t\t\tfunctionName: \"GenerateResearchReport\",",
+			"\t\t\t\t\t\tdescription: \"Generate a concise research report given several web search results.\",",
+			"\t\t\t\t\t\texecutionSettings: promptExecutionSettings);"
+		]
+	},
+	"sk14": {
+		"scope": "csharp",
+		"prefix": "sk14",
+		"body": [
+			"\t\tKernelPlugin webSearchAnalysisPlugin =",
+			"\t\t\t\tKernelPluginFactory.CreateFromFunctions(",
+			"\t\t\t\t\t\t\"WebSearchAnalysis\",",
+			"\t\t\t\t\t\t\"Helps Analyze web search results and make a report of them.\",",
+			"\t\t\t\t\t\tnew[] {",
+			"\t\t\t\t\t\t\t\t\t\tkernelFunctionDetermineRelevance,",
+			"\t\t\t\t\t\t\t\t\t\tkernelFunctionSummarize,",
+			"\t\t\t\t\t\t\t\t\t\tkernelFunctionResearchReportMaker",
+			"\t\t\t\t\t\t});",
+			"",
+			"\t\tkernel.Plugins.Add(webSearchAnalysisPlugin);"
 		]
 	}
 }
