@@ -388,5 +388,128 @@
 			"",
 			"\t\tkernel.Plugins.Add(webSearchAnalysisPlugin);"
 		]
+	},
+	"sk15": {
+		"scope": "csharp",
+		"prefix": "sk15",
+		"body": [
+			"\tprivate async Task<string> ProcessAndSummarizeSearchResults(",
+			"\t\tKernel kernel,",
+			"\t\tList<WebSearchResult> webSearchResults,",
+			"\t\tstring topicOfResearch)",
+			"\t{",
+			"\t}"
+		]
+	},
+	"sk16": {
+		"scope": "csharp",
+		"prefix": "sk16",
+		"body": [
+			"\t\tstring summarizeWebSearch = @\"",
+			"\t\t\t\t\t\t{{set \"\"searchResults\"\" (concat\t\"\"---\\n\"\" \"\" Search Results \\n Topic: \"\" topicOfResearch \"\"\\n---\\n\"\")}}",
+			"",
+			"\t\t\t\t\t\t{{#each webSearchResults}}",
+			"\t\t\t\t\t\t\t\t{{set \"\"summary\"\" (WebSearchAnalysis-Summarize this.Name this.Snippet )}}",
+			"\t\t\t\t\t\t\t\t{{set \"\"searchResults\"\" (concat searchResults \"\"URL: \"\" this.Url\t\"\"\\n\"\")}}",
+			"\t\t\t\t\t\t\t\t{{set \"\"searchResults\"\" (concat searchResults \"\"Name: \"\" this.Name\t\"\"\\n\"\")}}\t\t\t\t\t\t\t\t\t",
+			"\t\t\t\t\t\t\t\t{{set \"\"score\"\" (WebSearchAnalysis-DetermineRelevance topicOfResearch this.Name this.Snippet )}}",
+			"\t\t\t\t\t\t\t\t{{set \"\"searchResults\"\" (concat searchResults \"\"Relevance: \"\" score\t\"\"\\n\"\")}}\t\t\t\t\t\t\t ",
+			"\t\t\t\t\t\t\t\t{{set \"\"searchResults\"\" (concat searchResults \"\"Summary: \"\" summary\t\"\"\\n\"\")}}",
+			"\t\t\t\t\t\t\t\t{{set \"\"searchResults\"\" (concat searchResults \"\"---\\n\"\")}}\t\t\t\t\t\t\t\t\t",
+			"\t\t\t\t\t\t{{/each}}",
+			"",
+			"\t\t\t\t\t\t{{set \"\"reportForResearchTopic\"\" (WebSearchAnalysis-GenerateResearchReport topicofresearch=topicOfResearch searchresults=searchResults)}}",
+			"",
+			"\t\t\t\t\t\tYour goal is to provide the search results as they are provided next.",
+			"\t\t\t\t\t\tJust OUTPUT The following search results as is, do not modify anything:",
+			"\t\t\t\t\t\t{{json reportForResearchTopic}}\t\t\t\t\t\t",
+			"\t\t\t\t \";",
+			""
+		]
+	},
+	"sk17": {
+		"scope": "csharp",
+		"prefix": "sk17",
+		"body": [
+			"\t\tPromptExecutionSettings promptExecutionSettings = new OpenAIPromptExecutionSettings()",
+			"\t\t{",
+			"\t\t\tMaxTokens = 18000,",
+			"\t\t\tTemperature = 0.4,",
+			"\t\t};",
+			"",
+			"\t\tvar HandlebarsSPromptFunction = kernel.CreateFunctionFromPrompt(",
+			"\t\t\t\tnew PromptTemplateConfig()",
+			"\t\t\t\t{",
+			"\t\t\t\t\tTemplate = summarizeWebSearch,",
+			"\t\t\t\t\tTemplateFormat = \"handlebars\",",
+			"\t\t\t\t\tExecutionSettings = {",
+			"\t\t\t\t\t\t\t\t\t{",
+			"\t\t\t\t\t\t\t\t\t\t\t\"default\",",
+			"\t\t\t\t\t\t\t\t\t\t\tnew OpenAIPromptExecutionSettings() {",
+			"\t\t\t\t\t\t\t\t\t\t\t\t\tMaxTokens = 18000,",
+			"\t\t\t\t\t\t\t\t\t\t\t\t\tTemperature = 0.3",
+			"\t\t\t\t\t\t\t\t\t\t\t}",
+			"\t\t\t\t\t\t\t\t\t}",
+			"\t\t\t\t\t\t\t}",
+			"\t\t\t\t},",
+			"\t\t\t\t\tnew HandlebarsPromptTemplateFactory()",
+			"\t\t\t\t);"
+		]
+	},
+	"sk18": {
+		"scope": "csharp",
+		"prefix": "sk18",
+		"body": [
+			"\t\t// Time it",
+			"\t\tvar sw = new Stopwatch();",
+			"\t\tsw.Start();",
+			"",
+			"\t\t// Invoke prompt",
+			"\t\tvar customHandlebarsPromptResult = await kernel.InvokeAsync(",
+			"\t\t\t\t\t\t\t\tHandlebarsSPromptFunction,",
+			"\t\t\t\t\t\t\t\tnew() {",
+			"\t\t\t\t\t\t\t\t\t\t\t\t{ \"webSearchResults\", webSearchResults.Take(35) },",
+			"\t\t\t\t\t\t\t\t\t\t\t\t{ \"topicOfResearch\", topicOfResearch }",
+			"\t\t\t\t\t\t\t\t}",
+			"\t\t\t\t\t\t);",
+			"",
+			"\t\t// Stop the timer",
+			"\t\tsw.Stop();"
+		]
+	},
+	"sk19": {
+		"scope": "csharp",
+		"prefix": "sk19",
+		"body": [
+			"\t\tConsole.WriteLine(\\$\"OUTCOME\t\\n\");",
+			"\t\tConsole.WriteLine(\\$\"Milliseconds: {sw.ElapsedMilliseconds} \\n\");",
+			"\t\tlong totalMilliseconds = sw.ElapsedMilliseconds;",
+			"\t\tlong minutes = totalMilliseconds / (1000 * 60);",
+			"\t\tlong seconds = (totalMilliseconds / 1000) % 60;",
+			"\t\tlong milliseconds = totalMilliseconds % 1000;",
+			"\t\tConsole.WriteLine(\\$\"{minutes} min, {seconds} sec, {milliseconds} ms\");",
+			""
+		]
+	},
+	"sk20": {
+		"scope": "csharp",
+		"prefix": "sk20",
+		"body": [
+			"\t\tstring resultantString = customHandlebarsPromptResult.GetValue<string>();",
+			"\t\tvar correctedOutput = resultantString.Replace(\"\\\\n\", \"\\n\");",
+			""
+		]
+	},
+	"sk21": {
+		"scope": "csharp",
+		"prefix": "sk21",
+		"body": [
+			"\t\t// Store to file",
+			"\t\tawait File.WriteAllTextAsync(searchResultsSummarizedFileName, correctedOutput);",
+			"",
+			"\t\tConsole.WriteLine(\\$\" Result: {correctedOutput}\");",
+			"",
+			"\t\treturn resultantString;"
+		]
 	}
 }
