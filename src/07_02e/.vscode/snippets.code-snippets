@@ -173,5 +173,87 @@
 			"\tpublic string PageContent { get; set; }",
 			"}"
 		]
+	},
+	"sk05": {
+		"scope": "csharp",
+		"prefix": "sk05",
+		"body": [
+			"\tprivate static async Task<List<WebSearchResult>> SearchWithPlugin(",
+			"\t\t\tKernel kernel,",
+			"\t\t\tstring searchPluginName,",
+			"\t\t\tstring question,",
+			"\t\t\tint searchResultsCount = 10,",
+			"\t\t\tbool retrieveSearchFromFile = false)",
+			"\t{",
+			"\t\tstring searchResultValue = string.Empty;",
+			"",
+			"\t\tif (!retrieveSearchFromFile)",
+			"\t\t{",
+			"\t\t\tConsole.WriteLine(question);",
+			"\t\t\tConsole.WriteLine(\\$\"----{searchPluginName}----\");",
+			"",
+			"\t\t\tvar searchResult =",
+			"\t\t\t\t\tawait kernel.InvokeAsync(searchPluginName, \"Search\", new() {",
+			"\t\t\t\t\t\t\t{ \"query\", question },",
+			"\t\t\t\t\t\t\t{ \"count\", searchResultsCount },",
+			"\t\t\t\t\t\t\t{ \"offset\", 0 },",
+			"\t\t\t\t\t\t\t{ \"freshness\", \"Week\" }",
+			"\t\t\t\t\t});",
+			"",
+			"\t\t\tConsole.WriteLine(searchResult);",
+			"\t\t\tsearchResultValue = searchResult.GetValue<string>();",
+			"",
+			"\t\t\t// Save the search result",
+			"\t\t\tawait File.WriteAllTextAsync(searchResultsFileName, searchResultValue);",
+			"\t\t}",
+			"\t\telse",
+			"\t\t{",
+			"\t\t\t// Retrieve the search result",
+			"\t\t\tsearchResultValue = await File.ReadAllTextAsync(searchResultsFileName);",
+			"\t\t}",
+			"\t\t",
+			"\t}"
+		]
+	},
+	"sk06": {
+		"scope": "csharp",
+		"prefix": "sk06",
+		"body": [
+			"\tprivate static List<WebSearchResult> DeserializeWebSearchResults(string json)",
+			"\t{",
+			"\t\tvar options = new JsonSerializerOptions",
+			"\t\t{",
+			"\t\t\tPropertyNameCaseInsensitive = true // This makes the parser case-insensitive to property names",
+			"\t\t};",
+			"",
+			"\t\tList<WebSearchResult> webSearchResults =",
+			"\t\t\t\tJsonSerializer.Deserialize<List<WebSearchResult>>(json, options);",
+			"",
+			"\t\treturn webSearchResults;",
+			"\t}"
+		]
+	},
+	"sk07": {
+		"scope": "csharp",
+		"prefix": "sk07",
+		"body": [
+			"\t\t// Parse into array of objects",
+			"\t\tList<WebSearchResult> webSearchResults = DeserializeWebSearchResults(searchResultValue);",
+			"",
+			"\t\treturn webSearchResults;"
+		]
+	},
+	"sk08": {
+		"scope": "csharp",
+		"prefix": "sk08",
+		"body": [
+			"\t\tvar topicOfResearch = \"What are the latest generative AI models and advancements for the last week?\";",
+			"\t\tList<WebSearchResult> webSearchResults = await SearchWithPlugin(",
+			"\t\t\t\tkernel,",
+			"\t\t\t\twebSearchEnginePluginName,",
+			"\t\t\t\ttopicOfResearch,",
+			"\t\t\t\t10,",
+			"\t\t\t\tfalse);"
+		]
 	}
 }
