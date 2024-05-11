@@ -22,6 +22,8 @@ Again, it is recommended that you fork this repository if you'd like to do chang
 2. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
 3. To fully set your environment, follow chapter 02 video 01, which guides you on the setup.
 
+## Last chapter - practice
+You will notice that on Chapter 07 there is only one  `b`  beginning folder. This is intended as the `e` corresponding folder are the beginning state for the next practice, so if something does not work, check those folders for anything that might have been missed.
 
 [0]: # (Replace these placeholder URLs with actual course URLs)
 
