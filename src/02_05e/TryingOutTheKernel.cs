@@ -14,8 +14,7 @@ public class TryingOutTheKernel
         builder.Services.AddAzureOpenAIChatCompletion(
             modelDeploymentName,
             azureOpenAIEndpoint,
-            azureOpenAIApiKey,
-            modelId: "gpt-4-32k"
+            azureOpenAIApiKey
         );
         var kernel = builder.Build();
 
