@@ -2,6 +2,10 @@
 This is the repository for the LinkedIn Learning course Semantic Kernel in Action: 1 Fundamentals. 
 The full course is available from [LinkedIn Learning][lil-course-url].
 
+![lil-thumbnail-url]
+
+As AI becomes increasingly important in software development, Semantic Kernel offers a powerful tool for .NET developers to create, orchestrate, and integrate AI components and memories. In this course, developer community lead and software architect José Luis Latorre empowers you to stay ahead in the rapidly evolving AI landscape and guides you in building sophisticated AI solutions. Get a comprehensive overview of Semantic Kernel, including plug-ins, planners, and memories. Gain hands-on experience in setting up the environment, creating and orchestrating plug-ins, mastering planners, and working with memories. Plus, complete a final project that brings all the concepts presented in the course together.
+
 _See the readme file in the main folder for updated instructions and information._
 
 ## Instructions
@@ -25,7 +29,16 @@ Again, it is recommended that you fork this repository if you'd like to do chang
 ## Last chapter - practice
 You will notice that on Chapter 07 there is only one  `b`  beginning folder. This is intended as the `e` corresponding folder are the beginning state for the next practice, so if something does not work, check those folders for anything that might have been missed.
 
+### Instructor
+
+Jose Latorre
+
+Developer Community Lead and Software Architect at Swiss Life AG
+      
+
+Check out my other courses on [LinkedIn Learning](https://www.linkedin.com/learning/instructors/jose-latorre?u=104).
+
 [0]: # (Replace these placeholder URLs with actual course URLs)
 
-[lil-course-url]: https://www.linkedin.com/learning/
-[lil-thumbnail-url]: http://
+[lil-course-url]: https://www.linkedin.com/learning/semantic-kernel-in-action-fundamentals
+[lil-thumbnail-url]: https://media.licdn.com/dms/image/D560DAQH4wuYkJSejog/learning-public-crop_675_1200/0/1715989990777?e=2147483647&v=beta&t=A0RKdUlDsUYl6SeRNu8OVBQc-tEEHk2OG859Uq-Lr7I
